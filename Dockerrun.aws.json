@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "amigoscode-api",
-      "image": "amaturana14/amigoscode-api:latest",
+      "image": "amaturana14/myapp-api:latest",
       "essential": true,
       "memory": 512,
       "portMappings": [
