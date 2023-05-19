@@ -246,9 +246,9 @@
         <else>
             <root level="info">
                 <!--<appender-ref ref="JSON-CP"/>-->
-               <!-- <appender-ref ref="CONSOLE"/>-->
+               <appender-ref ref="CONSOLE"/>
                 <!--<appender-ref ref="JSON-RFA"/>-->
-                <appender-ref ref="logstashEncoderAppender"/>
+<!--                <appender-ref ref="logstashEncoderAppender"/>-->
             </root>
         </else>
     </if>
