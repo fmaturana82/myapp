@@ -114,7 +114,7 @@ jobs:
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "f.amaturana.i@gmail.com"
-          git add ../Dockerrun.aws.json
+          git add .
           git commit -m ${{ env.CI_COMMIT_MESSAGE }} 
           git push
 #      - name: Send Slack Message
