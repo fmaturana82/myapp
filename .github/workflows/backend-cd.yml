@@ -109,13 +109,14 @@ jobs:
 
       - name: Commit and push Dockerrun.aws.json
         run: |
-          ls
           git remote -v
           git config user.name github-actions
           git config user.email github-actions@gmail.com
           git remote set-url origin https://github.com/fmaturana82/myapp.git
+          git remote -v
           git add ../Dockerrun.aws.json
           git commit -m "Update  Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
+          git status
           git push
 
 #      - name: Send Slack Message
