@@ -6,11 +6,12 @@ import com.myapp.repository.CustomerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository("jpa")
+@Service("jpa")
 public class CustomerJPADataAccessService implements CustomerDao {
 
     private final CustomerRepository customerRepository;
