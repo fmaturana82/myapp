@@ -53,7 +53,7 @@ public class Main {
                 age,
                 gender);
         customerRepository.save(customer);
-
+        System.out.println("Customer is saved");
         //LOGGER.info("Customer is saved", kv("id", customer.getId()), kv("email", customer.getEmail()));
         //Map myMap = new HashMap();
         //myMap.put("trace_id", "value1");
