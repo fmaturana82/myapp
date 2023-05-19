@@ -108,11 +108,14 @@ jobs:
 #          ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Commit and push Dockerrun.aws.json
+        env:
+          CI_COMMIT_MESSAGE: Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}
+          CI_COMMIT_AUTHOR: Continuous Integration
         run: |
-          git config user.name fmaturana82
-          git config user.email f.amaturana.i@gmail.com
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "f.amaturana.i@gmail.com"
           git add ../Dockerrun.aws.json
-          git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
+          git commit -m ${{ env.CI_COMMIT_MESSAGE }} 
           git push
 #      - name: Send Slack Message
 #        run: >
