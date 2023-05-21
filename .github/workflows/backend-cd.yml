@@ -1,13 +1,15 @@
 name: CD - Deploy Backend
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:   
   push:
     branches:
       - master
     paths:
       - backend/**
-
+permissions:
+  contents: write
+  
 jobs:
   deploy:
     runs-on: ubuntu-latest
