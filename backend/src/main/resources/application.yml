@@ -45,10 +45,6 @@ spring:
   codec:
     max-in-memory-size: 10MB
 
-mock:
-  enable: false
-
-
 application:
   title: Api Backend
   version: v1.0.0
