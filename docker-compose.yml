@@ -3,7 +3,7 @@ services:
     container_name: postgres
     image: postgres:14.1
     environment:
-      POSTGRES_USER: amigoscode
+      POSTGRES_USER: testingDev
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
