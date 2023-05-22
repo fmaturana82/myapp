@@ -11,8 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(
-        name = "customer",
-schema = "customerschema"
+        name = "customer"
 //        uniqueConstraints = {
 //                @UniqueConstraint(
 //                        name = "customer_email_unique",

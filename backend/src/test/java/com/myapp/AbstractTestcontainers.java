@@ -12,17 +12,19 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 @Testcontainers
 public abstract class AbstractTestcontainers {
 
     @BeforeAll
     static void beforeAll() {
-        System.out.println("-->" + postgreSQLContainer.getJdbcUrl());
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl().replace("loggerLevel=OFF","loggerLevel=OFF&currentSchema=customerschema");
         Flyway flyway = Flyway
                 .configure()
                 .dataSource(
-                        postgreSQLContainer.getJdbcUrl(),
+                        jdbcUrl,
                         postgreSQLContainer.getUsername(),
                         postgreSQLContainer.getPassword()
                 ).load();
@@ -32,9 +34,11 @@ public abstract class AbstractTestcontainers {
     @Container
     protected static final PostgreSQLContainer<?> postgreSQLContainer =
             new PostgreSQLContainer<>("postgres:14.1")
-                    .withDatabaseName("amigoscode-dao-unit-test")
-                    .withUsername("amigoscode")
+                    .withDatabaseName("customercatalog_test")
+                    .withUsername("userTestingDev")
                     .withPassword("password");
+
+
 
     @DynamicPropertySource
     private static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
@@ -46,7 +50,7 @@ public abstract class AbstractTestcontainers {
     private static DataSource getDataSource() {
         return DataSourceBuilder.create()
                 .driverClassName(postgreSQLContainer.getDriverClassName())
-                .url(postgreSQLContainer.getJdbcUrl())
+                .url( postgreSQLContainer.getJdbcUrl())
                 .username(postgreSQLContainer.getUsername())
                 .password(postgreSQLContainer.getPassword())
                 .build();
