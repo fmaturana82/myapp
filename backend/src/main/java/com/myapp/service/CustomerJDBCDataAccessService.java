@@ -4,7 +4,6 @@ import com.myapp.domain.Customer;
 import com.myapp.mapper.CustomerRowMapper;
 import com.myapp.repository.CustomerDao;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

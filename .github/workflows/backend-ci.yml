@@ -4,7 +4,7 @@ on: [workflow_dispatch]
 #on:
 #  pull_request:
 #    branches:
-#      - master
+#      - main
 #    paths:
 #      - backend/**
 
@@ -15,7 +15,7 @@ jobs:
       postgres:
         image: postgres:14.1
         env:
-          POSTGRES_USER: amigoscode
+          POSTGRES_USER: testingDev
           POSTGRES_PASSWORD: password
           POSTGRES_DB: customer
         ports:

@@ -52,7 +52,7 @@ public class Main {
                 passwordEncoder.encode("password"),
                 age,
                 gender);
-        customerRepository.save(customer);
+        //customerRepository.save(customer);
         System.out.println("Customer is saved");
         //LOGGER.info("Customer is saved", kv("id", customer.getId()), kv("email", customer.getEmail()));
         //Map myMap = new HashMap();
