@@ -1,0 +1,257 @@
+<configuration>
+
+    <property name="HOME_LOG" value="D:/Training-IT/java/SpringBoot-React-AWS/logs/"/>
+    <property name="component" value="MyApp-API"/>
+    <property name="componentVersion" value="v1.0"/>
+    <property name="logLevel" value="info"/>
+   <!-- <property name="PROD_DEBUG" value="true"/>-->
+
+    <jmxConfigurator/>
+
+    <shutdownhook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+    <logger name="org.hibernate.SQL" level="INFO"/>
+
+    <appender name="JSON-RFA" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <if condition='isDefined("PROD_DEBUG")'>
+            <then>
+                <file>${HOME_LOG}/debug-prod.log</file>
+            </then>
+            <else>
+                <file>${HOME_LOG}/debug-dev.log</file>
+            </else>
+        </if>
+
+        <append>true</append>
+        <!-- set immediateFlush to false for much higher logging throughput -->
+        <immediateFlush>true</immediateFlush>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <arguments/>
+                <stackTrace/>
+                <mdc>
+                    <excludeMdcKeyName>ClaimNo</excludeMdcKeyName>
+                    <excludeMdcKeyName>ClaimId</excludeMdcKeyName>
+                </mdc>
+                <pattern>
+                    <!--<Pattern>[%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</Pattern>-->
+                    <pattern>
+                        {
+                        "timestamp": "%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSZ\"}",
+                        "level":"%level",
+                        "message": "%message",
+                        "component":"${component}",
+                        "version":"${componentVersion}",
+                        "machine":"${HOSTNAME}",
+                        "request_id": {
+                            "trace_id":"%X{X-B3-TraceId}",
+                            "span_id":"%X{X-B3-SpanId}",
+                            "parent_span_id":"%X{X-B3-ParentSpanId}"
+                        },
+                        "data": {
+                            "package":"%logger",
+                            "threadId":"%thread"
+                        },
+                        "exception":"%exception{short}",
+                        "stack":"%exception"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+            <jsonFactoryDecorator class="net.logstash.logback.decorate.CharacterEscapesJsonFactoryDecorator">
+                <escape>
+                    <targetCharacterCode>9</targetCharacterCode> <!-- Tab-->
+                    <escapeSequence></escapeSequence>
+                </escape>
+                <escape>
+                    <targetCharacterCode>10</targetCharacterCode>  <!-- New Line-->
+                    <escapeSequence></escapeSequence>
+                </escape>
+            </jsonFactoryDecorator>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${HOME_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="logstashEncoderAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" >
+            <fieldNames>
+                <message>customMessage</message>
+                <caller>caller</caller>
+                <callerClass>class</callerClass>
+                <callerMethod>method</callerMethod>
+                <callerFile>file</callerFile>
+                <callerLine>line</callerLine>
+            </fieldNames>
+            <includeCallerData>true</includeCallerData>
+            <shortenedLoggerNameLength>20</shortenedLoggerNameLength>
+            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">-->
+                <maxDepthPerThrowable>20</maxDepthPerThrowable>
+                <maxLength>1000</maxLength>
+                <shortenedClassNameLength>30</shortenedClassNameLength>
+                <rootCauseFirst>true</rootCauseFirst>
+                <exclude>excluded1</exclude>
+                <exclude>excluded2</exclude>
+                <inlineHash>true</inlineHash>
+            </throwableConverter>
+            <includeMdcKeyName>included</includeMdcKeyName>
+            <mdcKeyFieldName>key=renamedKey</mdcKeyFieldName>
+            <customFields>{"customName":"customValue"}</customFields>
+            <provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">
+                <omitEmptyFields>true</omitEmptyFields>
+                <pattern>{"patternName":"patternValue","relativeTime":"#asLong{%relative}"}</pattern>
+            </provider>
+            <provider class="net.logstash.logback.composite.loggingevent.LoggingEventNestedJsonProvider">
+                <fieldName>nested</fieldName>
+                <providers>
+                    <provider class="net.logstash.logback.composite.loggingevent.RawMessageJsonProvider">
+                        <fieldName>customRawMessage</fieldName>
+                    </provider>
+                    <provider class="net.logstash.logback.composite.UuidJsonProvider">
+                        <fieldName>id</fieldName>
+                        <strategy>time</strategy>
+                        <ethernet>00:C0:F0:3D:5B:7C</ethernet>
+                    </provider>
+                    <provider class="net.logstash.logback.composite.loggingevent.StackHashJsonProvider">
+                        <fieldName>customErrorHash</fieldName>
+                        <exclude>excluded1</exclude>
+                        <exclude>excluded2</exclude>
+                    </provider>
+                </providers>
+            </provider>
+            <provider class="net.logstash.logback.composite.loggingevent.SequenceJsonProvider">
+                <fieldName>sequenceNumberField</fieldName>
+            </provider>
+            <provider class="net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider">
+                <includeNonStructuredArguments>true</includeNonStructuredArguments>
+                <nonStructuredArgumentsFieldPrefix>prefix</nonStructuredArgumentsFieldPrefix>
+            </provider>
+            <provider class="net.logstash.logback.composite.loggingevent.ContextNameJsonProvider"/>
+        </encoder>
+        <!--        <encoder class="net.logstash.logback.encoder.LogstashEncoder">-->
+<!--            <fieldNames>-->
+<!--                <message>customMessage</message>-->
+<!--                <caller>caller</caller>-->
+<!--                <callerClass>class</callerClass>-->
+<!--                <callerMethod>method</callerMethod>-->
+<!--                <callerFile>file</callerFile>-->
+<!--                <callerLine>line</callerLine>-->
+<!--            </fieldNames>-->
+<!--            <includeCallerData>true</includeCallerData>-->
+<!--            <shortenedLoggerNameLength>20</shortenedLoggerNameLength>-->
+<!--            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">-->
+<!--                <maxDepthPerThrowable>20</maxDepthPerThrowable>-->
+<!--                <maxLength>1000</maxLength>-->
+<!--                <shortenedClassNameLength>30</shortenedClassNameLength>-->
+<!--                <rootCauseFirst>true</rootCauseFirst>-->
+<!--                <exclude>excluded1</exclude>-->
+<!--                <exclude>excluded2</exclude>-->
+<!--                <inlineHash>true</inlineHash>-->
+<!--            </throwableConverter>-->
+<!--            <includeMdcKeyName>included</includeMdcKeyName>-->
+<!--            <mdcKeyFieldName>key=renamedKey</mdcKeyFieldName>-->
+<!--            <customFields>{"customName":"customValue"}</customFields>-->
+<!--            <provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">-->
+<!--                <omitEmptyFields>true</omitEmptyFields>-->
+<!--                <pattern>{"patternName":"patternValue","relativeTime":"#asLong{%relative}"}</pattern>-->
+<!--            </provider>-->
+<!--            <provider class="net.logstash.logback.composite.loggingevent.LoggingEventNestedJsonProvider">-->
+<!--                <fieldName>nested</fieldName>-->
+<!--                <providers>-->
+<!--                    <provider class="net.logstash.logback.composite.loggingevent.RawMessageJsonProvider">-->
+<!--                        <fieldName>customRawMessage</fieldName>-->
+<!--                    </provider>-->
+<!--                    <provider class="net.logstash.logback.composite.UuidJsonProvider">-->
+<!--                        <fieldName>id</fieldName>-->
+<!--                        <strategy>time</strategy>-->
+<!--                        <ethernet>00:C0:F0:3D:5B:7C</ethernet>-->
+<!--                    </provider>-->
+<!--                    <provider class="net.logstash.logback.composite.loggingevent.StackHashJsonProvider">-->
+<!--                        <fieldName>customErrorHash</fieldName>-->
+<!--                        <exclude>excluded1</exclude>-->
+<!--                        <exclude>excluded2</exclude>-->
+<!--                    </provider>-->
+<!--                </providers>-->
+<!--            </provider>-->
+<!--            <provider class="net.logstash.logback.composite.loggingevent.SequenceJsonProvider">-->
+<!--                <fieldName>sequenceNumberField</fieldName>-->
+<!--            </provider>-->
+<!--            <provider class="net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider">-->
+<!--                <includeNonStructuredArguments>true</includeNonStructuredArguments>-->
+<!--                <nonStructuredArgumentsFieldPrefix>prefix</nonStructuredArgumentsFieldPrefix>-->
+<!--            </provider>-->
+<!--            <provider class="net.logstash.logback.composite.loggingevent.ContextNameJsonProvider"/>-->
+<!--        </encoder>-->
+    </appender>
+
+    <appender name="JSON-CP" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "timestamp": "%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSZ\"}",
+                        "level":"%level",
+                        "message": "%message",
+                        "component":"${component}",
+                        "component_version":"${componentVersion}",
+                        "machine":"${HOSTNAME}",
+                        "request_id":
+                        {
+                        "trace_id":"%X{X-B3-TraceId}",
+                        "span_id":"%X{X-B3-SpanId}",
+                        "parent_span_id":"%X{X-B3-ParentSpanId}"
+                        },
+                        "data":
+                        {
+                        "package":"%logger", "threadId":"%thread"
+                        },
+                        "exception":"%exception{short}",
+                        "stack":"%exception"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d [%thread] %highlight(%-5level) %cyan(%logger{16}) - %blue(%msg %n)</Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework.web" level="INFO" additivity="false" >
+        <appender-ref ref="JSON-RFA"/>
+    </logger>
+
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+        <level value="INFO"/>
+    </logger>
+
+    <if condition='isDefined("PROD_DEBUG")'>
+        <then>
+            <root level="info">
+                <appender-ref ref="CONSOLE"/>
+                <!--<appender-ref ref="logstashEncoderAppender"/>-->
+            </root>
+        </then>
+        <else>
+            <root level="info">
+                <!--<appender-ref ref="JSON-CP"/>-->
+               <appender-ref ref="CONSOLE"/>
+                <!--<appender-ref ref="JSON-RFA"/>-->
+<!--                <appender-ref ref="logstashEncoderAppender"/>-->
+            </root>
+        </else>
+    </if>
+
+
+</configuration>

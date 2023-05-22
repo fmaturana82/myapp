@@ -1,0 +1,23 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "myapp-api",
+	  "image": "amaturana14/myapp-api:21.05.2023.01.43.47",
+	  "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 8080
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:postgresql://awseb-e-utnvmmum8c-stack-awsebrdsdatabase-dk7pm4jbeqdo.cre4q5zoewcp.us-east-1.rds.amazonaws.com:5432/ebdb"
+        }
+      ]
+    }
+  ]
+}

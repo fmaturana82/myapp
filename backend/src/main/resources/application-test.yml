@@ -1,0 +1,11 @@
+aws:
+  s3:
+    mock: false
+
+spring:
+  datasource:
+    url: jdbc-secretsmanager:postgresql://awseb-e-n45f92hifp-stack-awsebrdsdatabase-tl0rrdrj4ane.cre4q5zoewcp.us-east-1.rds.amazonaws.com:5432/ebdb
+    username: test/full-stack/postgres
+    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerPostgreSQLDriver
+
+
