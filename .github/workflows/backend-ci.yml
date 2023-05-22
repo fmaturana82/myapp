@@ -15,9 +15,9 @@ jobs:
       postgres:
         image: postgres:14.1
         env:
-          POSTGRES_USER: testingDev
+          POSTGRES_DB: customercatalog
+          POSTGRES_USER: userTestingDev
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: customer
         ports:
           - 5332:5432
         options: >-
