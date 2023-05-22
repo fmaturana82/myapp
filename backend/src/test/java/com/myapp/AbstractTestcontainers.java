@@ -12,6 +12,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 
 @Testcontainers
 public abstract class AbstractTestcontainers {

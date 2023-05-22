@@ -1,4 +1,4 @@
-package com.myapp.controller.login;
+package com.myapp.controller;
 
 import com.myapp.request.AuthenticationRequest;
 import com.myapp.response.AuthenticationResponse;
