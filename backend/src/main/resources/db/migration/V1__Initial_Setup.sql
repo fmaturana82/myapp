@@ -4,5 +4,6 @@ CREATE TABLE customer (
     email TEXT NOT NULL,
     password TEXT NOT NULL,
     gender TEXT NOT NULL,
-    age INT NOT NULL
+    age INT NOT NULL,
+    profile_image_id VARCHAR(36)
 );

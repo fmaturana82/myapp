@@ -15,6 +15,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     private final JdbcTemplate jdbcTemplate;
     private final CustomerRowMapper customerRowMapper;
 
+    private final String SCHEMA = "customerschema";
     public CustomerJDBCDataAccessService(JdbcTemplate jdbcTemplate,
                                          CustomerRowMapper customerRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
@@ -23,22 +24,16 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public List<Customer> selectAllCustomers() {
-        var sql = """
-                SELECT id, name, email, password, age, gender, profile_image_id
-                FROM customer
-                LIMIT 1000
-                """;
-
+        var sql = new StringBuilder("SELECT id, name, email, password, age, gender, profile_image_id FROM ")
+                .append("customerschema.customer").append(" LIMIT 1000").toString();
         return jdbcTemplate.query(sql, customerRowMapper);
     }
 
     @Override
     public Optional<Customer> selectCustomerById(Integer id) {
-        var sql = """
-                SELECT id, name, email, password, age, gender, profile_image_id
-                FROM customer
-                WHERE id = ?
-                """;
+        var sql = new StringBuilder("SELECT id, name, email, password, age, gender, profile_image_id FROM ")
+                .append("customerschema.customer").append("  WHERE id = ?").toString();
+
         return jdbcTemplate.query(sql, customerRowMapper, id)
                 .stream()
                 .findFirst();
@@ -47,7 +42,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public void insertCustomer(Customer customer) {
         var sql = """
-                INSERT INTO customer(name, email, password, age, gender)
+                INSERT INTO customerschema.customer(name, email, password, age, gender)
                 VALUES (?, ?, ?, ?, ?)
                 """;
         int result = jdbcTemplate.update(
@@ -66,7 +61,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     public boolean existsCustomerWithEmail(String email) {
         var sql = """
                 SELECT count(id)
-                FROM customer
+                FROM customerschema.customer
                 WHERE email = ?
                 """;
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
@@ -77,7 +72,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     public boolean existsCustomerById(Integer id) {
         var sql = """
                 SELECT count(id)
-                FROM customer
+                FROM customerschema.customer
                 WHERE id = ?
                 """;
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
@@ -88,7 +83,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     public void deleteCustomerById(Integer customerId) {
         var sql = """
                 DELETE
-                FROM customer
+                FROM customerschema.customer
                 WHERE id = ?
                 """;
         int result = jdbcTemplate.update(sql, customerId);
@@ -98,7 +93,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public void updateCustomer(Customer update) {
         if (update.getName() != null) {
-            String sql = "UPDATE customer SET name = ? WHERE id = ?";
+            String sql = "UPDATE customerschema.customer SET name = ? WHERE id = ?";
             int result = jdbcTemplate.update(
                     sql,
                     update.getName(),
@@ -107,7 +102,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
             System.out.println("update customer name result = " + result);
         }
         if (update.getAge() != null) {
-            String sql = "UPDATE customer SET age = ? WHERE id = ?";
+            String sql = "UPDATE customerschema.customer SET age = ? WHERE id = ?";
             int result = jdbcTemplate.update(
                     sql,
                     update.getAge(),
@@ -116,7 +111,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
             System.out.println("update customer age result = " + result);
         }
         if (update.getEmail() != null) {
-            String sql = "UPDATE customer SET email = ? WHERE id = ?";
+            String sql = "UPDATE customerschema.customer SET email = ? WHERE id = ?";
             int result = jdbcTemplate.update(
                     sql,
                     update.getEmail(),
@@ -129,7 +124,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     public Optional<Customer> selectUserByEmail(String email) {
         var sql = """
                 SELECT id, name, email, password, age, gender, profile_image_id
-                FROM customer
+                FROM customerschema.customer
                 WHERE email = ?
                 """;
         return jdbcTemplate.query(sql, customerRowMapper, email)
@@ -141,7 +136,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     public void updateCustomerProfileImageId(String profileImageId,
                                              Integer customerId) {
         var sql = """
-                UPDATE customer
+                UPDATE customerschema.customer
                 SET profile_image_id = ?
                 WHERE id = ?
                 """;

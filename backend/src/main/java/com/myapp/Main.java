@@ -52,17 +52,15 @@ public class Main {
                 passwordEncoder.encode("password"),
                 age,
                 gender);
-        //customerRepository.save(customer);
+//        customerRepository.save(customer);
         System.out.println("Customer is saved");
         //LOGGER.info("Customer is saved", kv("id", customer.getId()), kv("email", customer.getEmail()));
         //Map myMap = new HashMap();
         //myMap.put("trace_id", "value1");
         //myMap.put("name2", "value2");
         //LOGGER.info(appendEntries(myMap), "log message 1");
-
         //LOGGER.info(append("Customer is saved 2", kv("id", customer.getEmail())), "log messagexxxx");
         //LOGGER.info("log message 3 {}", fields( kv("trace_id", customer.getId())));
-
     }
 
 }

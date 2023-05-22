@@ -12,16 +12,17 @@ import java.util.Objects;
 @Entity
 @Table(
         name = "customer",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "customer_email_unique",
-                        columnNames = "email"
-                ),
-                @UniqueConstraint(
-                        name = "profile_image_id_unique",
-                        columnNames = "profileImageId"
-                )
-        }
+schema = "customerschema"
+//        uniqueConstraints = {
+//                @UniqueConstraint(
+//                        name = "customer_email_unique",
+//                        columnNames = "email"
+//                ),
+//                @UniqueConstraint(
+//                        name = "profile_image_id_unique",
+//                        columnNames = "profile_image_id"
+//                )
+//        }
 )
 public class Customer implements UserDetails {
     @Id
@@ -35,33 +36,23 @@ public class Customer implements UserDetails {
             generator = "customer_id_seq"
     )
     private Integer id;
-    @Column(
-            nullable = false
-    )
+
+    @Column(nullable = false)
     private String name;
-    @Column(
-            nullable = false
-    )
+
+    @Column(nullable = false)
     private String email;
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     private Integer age;
 
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     private String password;
 
-    @Column(
-            unique = true
-    )
+    @Column(name = "profile_image_id" )
     private String profileImageId;
 
     public Customer() {
