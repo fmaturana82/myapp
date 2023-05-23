@@ -325,6 +325,46 @@
                             <tag>latest</tag>
                         </tags>
                     </to>
+                    <container>
+                       <!-- <creationTime>EPOCH</creationTime>-->
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                        <mainClass>com.myapp.Main</mainClass>
+                        <jvmFlags>
+                            <jvmFlag>-XX:InitialRAMPercentage=40.0</jvmFlag>
+                            <jvmFlag>-XX:MinRAMPercentage=20.0</jvmFlag>
+                            <jvmFlag>-XX:MaxRAMPercentage=80.0</jvmFlag>
+                            <jvmFlag>-XX:+UseStringDeduplication</jvmFlag>
+                            <jvmFlag>-XX:+HeapDumpOnOutOfMemoryError</jvmFlag>
+                            <jvmFlag>-XX:HeapDumpPath=/opt/container/dump_java_pid%p.hprof</jvmFlag>
+                            <jvmFlag>-XX:+UnlockDiagnosticVMOptions</jvmFlag>
+                            <jvmFlag>-XX:+DebugNonSafepoints</jvmFlag>
+                            <jvmFlag>-XX:FlightRecorderOptions=stackdepth=256</jvmFlag>
+                            <jvmFlag>-Dsun.management.jmxremote.level=FINEST</jvmFlag>
+                            <jvmFlag>-Dsun.management.jmxremote.handlers=java.util.logging.ConsoleHandler</jvmFlag>
+                            <jvmFlag>-Djava.util.logging.ConsoleHandler.level=FINEST</jvmFlag>
+                            <jvmFlag>-Dcom.sun.management.jmxremote</jvmFlag>
+                            <jvmFlag>-Dcom.sun.management.jmxremote=true</jvmFlag>
+                            <!--  <jvmFlag>-Dcom.sun.management.jmxremote.port=32767</jvmFlag>-->
+                            <jvmFlag>-Dcom.sun.management.jmxremote.authenticate=false</jvmFlag>
+                            <jvmFlag>-Dcom.sun.management.jmxremote.ssl=false</jvmFlag>
+                            <!-- <jvmFlag>-Dcom.sun.management.jmxremote.rmi.port=32767</jvmFlag>-->
+                            <jvmFlag>-Dcom.sun.management.jmxremote.host=0.0.0.0</jvmFlag>
+                            <jvmFlag>-Dcom.sun.management.jmxremote.local.only=false</jvmFlag>
+                        </jvmFlags>
+                        <environment>
+                            <env1>envvalue1</env1>
+                            <env2>envvalue2</env2>
+                        </environment>
+                        <ports>
+                           <port>1000/tcp</port>
+                           <port>2000-2002/udp</port>
+                        </ports>
+                        <labels>
+                            <key1>value1</key1>
+                            <key2>value2</key2>
+                        </labels>
+                        <format>Docker</format>
+                    </container>
                 </configuration>
             </plugin>
         </plugins>
